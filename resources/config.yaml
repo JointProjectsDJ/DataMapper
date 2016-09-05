@@ -1,0 +1,20 @@
+Redis:
+  host: laptop
+  port: 6379
+  user:
+  pass:
+Cassandra:
+  host: laptop,pc
+  port: 9042
+  user:
+  pass:
+MongoDB:
+  host: laptop
+  port:
+  user:
+  pass:
+MySQL:
+  host: laptop
+  port: 3306
+  user:
+  pass:
