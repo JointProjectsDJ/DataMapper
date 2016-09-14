@@ -1,20 +1,21 @@
 Redis:
-  host: laptop
+  host: 192.168.0.125
   port: 6379
   user:
   pass:
 Cassandra:
-  host: laptop,pc
+  host: 192.168.0.125,192.168.0.122
   port: 9042
   user:
   pass:
 MongoDB:
-  host: laptop
+  host: 192.168.0.125
   port:
   user:
   pass:
 MySQL:
-  host: laptop
+  host: 192.168.0.125
   port: 3306
   user:
   pass:
+  database:

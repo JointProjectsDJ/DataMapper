@@ -16,6 +16,7 @@ class Pool:
     PORT = 'port'
     USER = 'user'
     PASS = 'pass'
+    DATABASE = 'database'
     COMMA = ','
     configs = None
     redisPool = None
@@ -50,10 +51,12 @@ class Pool:
         hosts, port, user, password = self.get_params(config)
         redisPool = ConnectionPool(host=hosts, port=port)
 
-    def create_mysql(self, database):
-        global MYSQL, mysqlPool
+    def create_mysql(self, database=None):
+        global MYSQL, DATABASE, mysqlPool
         config = configs[MYSQL]
         hosts, port, user, password = self.get_params(config)
+        if not database:
+            database = config[DATABASE]
         dbconfig = {'database': database,
                     'user': user,
                     'password': password,

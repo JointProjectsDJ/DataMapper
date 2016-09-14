@@ -3,16 +3,21 @@ import cassandra
 import pymongo
 import mysql
 
+from datasources import MapCassandra
+from datasources import MapRedis
+from datasources import MapMySql
+from datasources import MapMongo
+
 
 def create(conn, payload):
     if isinstance(conn, redis.client.Redis):
-        pass
+        MapRedis()
     elif isinstance(conn, cassandra.cluster.Cassandra):
-        pass
+        MapCassandra()
     elif isinstance(conn, pymongo.MongoClient):
-        pass
+        MapMongo()
     elif isinstance(conn, mysql.connector.connection.MySQLConnection):
-        pass
+        MapMySql()
 
 
 def read(conn, payload):
