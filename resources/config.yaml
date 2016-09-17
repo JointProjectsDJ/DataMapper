@@ -8,11 +8,13 @@ Cassandra:
   port: 9042
   user:
   pass:
+  database:
 MongoDB:
   host: 192.168.0.125
   port:
   user:
   pass:
+  database:
 MySQL:
   host: 192.168.0.125
   port: 3306

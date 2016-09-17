@@ -6,4 +6,4 @@ class MapMySql:
         server = pool.get_mysql()
 
     def __del__(self):
-        pass
+        server.close()
