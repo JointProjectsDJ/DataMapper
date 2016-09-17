@@ -3,7 +3,7 @@ class MapMongo:
 
     def __init__(self, pool):
         global server
-        server = pool.create_mongo()
+        server = pool.get_mongo()
 
-    def get_mongo(self):
-        return server
+    def __del__(self):
+        pass

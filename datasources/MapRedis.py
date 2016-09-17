@@ -3,7 +3,7 @@ class MapRedis:
 
     def __init__(self, pool):
         global server
-        server = pool.create_redis()
+        server = pool.get_redis()
 
-    def get_redis(self):
-        return server
+    def __del__(self):
+        pass

@@ -3,7 +3,7 @@ class MapMySql:
 
     def __init__(self, pool):
         global server
-        server = pool.create_mysql()
+        server = pool.get_mysql()
 
-    def get_mysql(self):
-        return server
+    def __del__(self):
+        pass
