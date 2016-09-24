@@ -3,7 +3,7 @@ class MapCassandra:
 
     def __init__(self, pool):
         global server
-        server = pool.get_cassandra()
+        self.server = pool.get_cassandra()
 
     def __del__(self):
         pass

@@ -7,6 +7,7 @@ from startup.Startup import pool
 
 # TODO Add else clauses to all methods to return error message in case sent server message does not match any configured instance
 # TODO Add error checking for all files
+# TODO Add check for multiple queries to mysql and then add multi=True
 
 def create(server, payload):
     """
@@ -14,7 +15,6 @@ def create(server, payload):
     Redis: set, lpush and sadd.
     Mongo: insert_one, insert_many
     More to be added later. Goal is to cover all methods.
-    MySQL input takes in tuples
     """
     if isinstance(server, Redis):
         key = payload['key']
@@ -47,7 +47,7 @@ def create(server, payload):
         else:
             return col.insert_one(doc).inserted_id
     elif isinstance(server, PooledMySQLConnection):
-        cursor = server.cursor()
+        cursor = server.cursor(buffered=True)
         query = payload['query']
         if 'params' in payload:
             params = payload['params']
@@ -67,10 +67,9 @@ def read(server, payload):
     Redis: get, lrange and smembers
     Mongo: find
     More to be added later. Goal is to cover all methods.
-    MySQL input takes in tuples
     """
     if isinstance(server, Redis):
-        command = payload['command']
+        command = payload['command'].upper()
         key = payload['key']
         if command == 'LRANGE':
             start = payload['start']
@@ -97,14 +96,23 @@ def read(server, payload):
             database = pool.configs['MongoDB']['database']
             db = server[database]
         col = db[collection]
-        return col.find(filterm)
+        if len(filterm) == 0:
+            rs = [doc for doc in col.find()]
+            return rs
+        else:
+            rs = [doc for doc in col.find(filterm)]
+            return rs
     elif isinstance(server, PooledMySQLConnection):
+        cursor = server.cursor(buffered=True)
         query = payload['query']
         if 'params' in payload:
             params = payload['params']
-            return server.execute(query, params)
+            rs = cursor.execute(query, params)
         else:
-            return server.execute(query)
+            cursor.execute(query)
+        rs = [r for r in cursor]
+        cursor.close()
+        return rs
     else:
         pass
 
@@ -114,7 +122,6 @@ def update(server, payload):
     Update methods currently considered =>
     Redis: lset
     Mongo: update_many
-    MySQL input takes in tuples
     """
     if isinstance(server, Redis):
         command = payload['command'].upper()
@@ -143,7 +150,7 @@ def update(server, payload):
         col = db[collection]
         return col.update_many(filterm, doc).modified_count
     elif isinstance(server, PooledMySQLConnection):
-        cursor = server.cursor()
+        cursor = server.cursor(buffered=True)
         query = payload['query']
         if 'params' in payload:
             params = payload['params']
@@ -162,7 +169,6 @@ def delete(server, payload):
     Delete methods currently considered =>
     Redis: del, lpop, srem, lrem
     Mongo: delete_many
-    MySQL input takes in tuples
     """
     if isinstance(server, Redis):
         command = payload['command'].upper()
@@ -197,13 +203,15 @@ def delete(server, payload):
         col = db[collection]
         return col.delete_many(filterm).deleted_count
     elif isinstance(server, PooledMySQLConnection):
+        cursor = server.cursor(buffered=True)
         query = payload['query']
         if 'params' in payload:
             params = payload['params']
-            server.execute(query, params)
+            cursor.execute(query, params)
             server.commit()
         else:
-            server.execute(query)
+            cursor.execute(query)
             server.commit()
+        cursor.close()
     else:
         pass

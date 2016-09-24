@@ -17,73 +17,77 @@ class Pool:
     USER = 'user'
     PASS = 'pass'
     DATABASE = 'database'
+    KEYSPACE = 'keyspace'
     COMMA = ','
     configs = None
     redisPool = None
     mongoPool = None
     cassandraPool = None
     mysqlPool = None
+    keyspace = None
 
     def __init__(self):
         global configs
-        configs = get_configs()
+        self.configs = get_configs()
         self.create_cassandra()
-        self.create_redis()
-        self.create_mongo()
-        self.create_mysql()
+        # self.create_redis()
+        # self.create_mongo()
+        # self.create_mysql()
 
     def get_params(self, config):
         global HOST, PORT, USER, PASS
-        return config[HOST], config[PORT], config[USER], config[PASS]
+        return config[self.HOST], config[self.PORT], config[self.USER], config[self.PASS]
 
     # perform exception handling with logging
 
     def create_cassandra(self):
-        global CASSANDRA, COMMA, cassandraPool
-        config = configs[CASSANDRA]
+        global CASSANDRA, COMMA, KEYSPACE, cassandraPool, keyspace
+        config = self.configs[self.CASSANDRA]
         hosts, port, user, password = self.get_params(config)
-        hosts = hosts.strip().split(COMMA)
-        cassandraPool = Cluster(hosts, port)
+        hosts = hosts.strip().split(self.COMMA)
+        self.keyspace = config[self.KEYSPACE]
+        self.cassandraPool = Cluster(hosts, port)
 
     def create_redis(self):
         global REDIS, redisPool
-        config = configs[REDIS]
+        config = self.configs[self.REDIS]
         hosts, port, user, password = self.get_params(config)
-        redisPool = ConnectionPool(host=hosts, port=port)
+        self.redisPool = ConnectionPool(host=hosts, port=port)
 
     def create_mysql(self, database=None):
         global MYSQL, DATABASE, mysqlPool
-        config = configs[MYSQL]
+        config = self.configs[self.MYSQL]
         hosts, port, user, password = self.get_params(config)
         if not database:
-            database = config[DATABASE]
+            database = config[self.DATABASE]
         dbconfig = {'database': database,
                     'user': user,
                     'password': password,
                     'host': hosts,
                     'port': port}
-        mysqlPool = MySQLConnectionPool(pool_size=CNX_POOL_MAXSIZE, pool_name='POOL', **dbconfig)
+        self.mysqlPool = MySQLConnectionPool(pool_size=CNX_POOL_MAXSIZE, pool_name='POOL', **dbconfig)
 
     def create_mongo(self):
         global MONGO, mongoPool
-        config = configs[MONGO]
+        config = self.configs[self.MONGO]
         hosts, port, user, password = self.get_params(config)
-        mongoPool = MongoClient(host=hosts, port=port)
+        self.mongoPool = MongoClient(host=hosts, port=port)
 
     def get_redis(self):
-        return Redis(connection_pool=redisPool)
+        return Redis(connection_pool=self.redisPool)
 
     def get_cassandra(self):
-        return cassandraPool.connect()
+        return self.cassandraPool.connect(self.keyspace)
 
     def get_mysql(self):
-        return mysqlPool.get_connection()
+        return self.mysqlPool.get_connection()
 
     def get_mongo(self):
-        return mongoPool
+        return self.mongoPool
 
-    def __del__(self):
-        redisPool.disconnect()
-        mongoPool.close()
-        mysqlPool.close()
-        cassandraPool.shutdown()
+        # def __del__(self):
+        #     global redisPool, mongoPool, mysqlPool, cassandraPool
+        #     self.redisPool.disconnect()
+        #     self.mongoPool.close()
+        #     self.mysqlPool.close()
+        #     self.cassandraPool.shutdown()
