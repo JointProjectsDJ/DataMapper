@@ -25,10 +25,10 @@ mc = MapCassandra.MapCassandra(pool).server
 # psu = {'query': 'update test set value = \'new test text\' where test = 45;'}
 # psd = {'query': 'delete from test where test = 45;'}
 pcc = {
-    'query': 'create table test(test int primary key, value text); insert into test(test, value) values(1, \'test text\');'}
+    'query': 'insert into test(test, value) values(4, \'test text\');'}
 pcr = {'query': 'select * from test;'}
-pcu = {'query': 'update test set value = \'new test text\' where test = 1;'}
-pcd = {'query': 'delete from test where value = 1;'}
+pcu = {'query': 'update test set value = \'new test text\' where test = 4;'}
+pcd = {'query': 'delete from test where test = 4;'}
 # pmc = {'doc': {'test': 'test'}, 'collection': 'test'}
 # pmr = {'collection': 'test', 'filter': {}}
 # pmu = {'doc': {'$set': {'test': 'new test'}}, 'collection': 'test', 'filter': {}}

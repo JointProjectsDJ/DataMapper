@@ -83,9 +83,10 @@ def read(server, payload):
         query = payload['query']
         if 'params' in payload:
             params = payload['params']
-            return server.execute(query, params)
+            rs = [r for r in server.execute(query, params)]
         else:
-            return server.execute(query)
+            rs = [r for r in server.execute(query)]
+        return rs
     elif isinstance(server, MongoClient):
         collection = payload['collection']
         filterm = payload['filter']
@@ -107,7 +108,7 @@ def read(server, payload):
         query = payload['query']
         if 'params' in payload:
             params = payload['params']
-            rs = cursor.execute(query, params)
+            cursor.execute(query, params)
         else:
             cursor.execute(query)
         rs = [r for r in cursor]
