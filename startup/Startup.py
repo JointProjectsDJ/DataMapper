@@ -1,9 +1,9 @@
 # Start script for the app. All initializations to be performed here.
 from connections.Pool import Pool
 
-pool = None
+# pool = None
 
-global pool
+# global pool
 pool = Pool()
 # pool.create_cassandra()
 # pool.create_mongo()

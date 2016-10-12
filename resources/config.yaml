@@ -1,23 +1,23 @@
 Redis:
-  host: 192.168.0.125
+  host: localhost
   port: 6379
   user:
   pass:
 Cassandra:
-  host: 192.168.0.125,192.168.0.122
+  host: localhost
   port: 9042
   user:
   pass:
-  database:
+  keyspace: mapper
 MongoDB:
-  host: 192.168.0.125
-  port:
+  host: localhost
+  port: 27017
   user:
   pass:
-  database:
+  database: mapper
 MySQL:
-  host: 192.168.0.125
+  host: localhost
   port: 3306
-  user:
-  pass:
-  database:
+  user: root
+  pass: root
+  database: mapper
