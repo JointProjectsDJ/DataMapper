@@ -2,8 +2,9 @@ from redis.client import Redis
 from cassandra.cluster import Session
 from pymongo.mongo_client import MongoClient
 from mysql.connector.pooling import PooledMySQLConnection
-from startup.Startup import conn_pool
+import startup.Startup
 
+conn_pool = startup.Startup.get_connection_pool()
 
 # TODO Add else clauses to all methods to return error message in case sent server message does not match any configured instance
 # TODO Add error checking for all files

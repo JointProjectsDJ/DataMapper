@@ -4,7 +4,7 @@ from datasources import MapRedis, MapMySql, MapCassandra, MapMongo, MapActions
 
 class WrapperFactory:
     def __init__(self):
-        self.conn_pool = Startup.conn_pool
+        self.conn_pool = Startup.get_connection_pool()
         self.server = None
 
     def set_server_object(self, source):

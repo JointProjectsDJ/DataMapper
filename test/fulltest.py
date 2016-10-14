@@ -7,7 +7,7 @@ from startup import Startup
 from datasources import MapRedis, MapMySql, MapCassandra, MapMongo, MapActions
 
 # First call to startup.
-pool = Startup.conn_pool
+pool = Startup.get_connection_pool()
 
 # Create MapRedis, MapMySql, MapMongo and MapCassandra objects
 # mr = MapRedis.MapRedis(pool).server

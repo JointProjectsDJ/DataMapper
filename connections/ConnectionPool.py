@@ -71,7 +71,7 @@ class ConnectionPool:
         global MONGO, mongoPool
         config = self.configs[self.MONGO]
         hosts, port, user, password = self.get_params(config)
-        self.mongoPool = MongoClient(host=hosts, port=port)
+        self.mongoPool = MongoClient(host=hosts, port=port, connect=False)
 
     def get_redis(self):
         return Redis(connection_pool=self.redisPool)

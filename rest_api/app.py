@@ -1,4 +1,5 @@
 # !flask/bin/python
+import json
 from flask import Flask, jsonify, request
 from flask import make_response, abort, url_for
 from workers.invoke_workers import Workers
@@ -32,11 +33,12 @@ def perform_mapper_action():
     response = workers.invoke(mapper_entity)
     try:
         # This is a very rudimentary manner of handling JSON responses and is mostly wrong
-        response = jsonify(response)
+        # TODO Correct JSON Parsing
+        response = json.loads(json.dumps(response))
     except Exception as e:
         print(e)
         response = str(response)
-    return jsonify({"response": str(response)}), 201
+    return jsonify({"response": response}), 201
 
 
 @app.errorhandler(404)
