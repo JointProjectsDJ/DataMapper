@@ -1,5 +1,5 @@
-from connections import Pool
+from connections import ConnectionPool
 
-Pool.get_config()
+ConnectionPool.get_config()
 
-print(type(Pool.get_redis()))
+print(type(ConnectionPool.get_redis()))

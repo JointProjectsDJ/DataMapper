@@ -7,7 +7,7 @@ from config.GetConfig import get_configs
 
 # Pool initialization to be performed in startup script
 
-class Pool:
+class ConnectionPool:
     CASSANDRA = 'Cassandra'
     REDIS = 'Redis'
     MONGO = 'MongoDB'
@@ -27,7 +27,7 @@ class Pool:
     keyspace = None
 
     def __init__(self):
-        # global configs
+        global configs
         self.configs = get_configs()
         self.create_cassandra()
         # self.create_redis()
@@ -35,13 +35,13 @@ class Pool:
         # self.create_mysql()
 
     def get_params(self, config):
-        # global HOST, PORT, USER, PASS
+        global HOST, PORT, USER, PASS
         return config[self.HOST], config[self.PORT], config[self.USER], config[self.PASS]
 
     # perform exception handling with logging
 
     def create_cassandra(self):
-        # global CASSANDRA, COMMA, KEYSPACE, cassandraPool, keyspace
+        global CASSANDRA, COMMA, KEYSPACE, cassandraPool, keyspace
         config = self.configs[self.CASSANDRA]
         hosts, port, user, password = self.get_params(config)
         hosts = hosts.strip().split(self.COMMA)
@@ -49,13 +49,13 @@ class Pool:
         self.cassandraPool = Cluster(hosts, port)
 
     def create_redis(self):
-        # global REDIS, redisPool
+        global REDIS, redisPool
         config = self.configs[self.REDIS]
         hosts, port, user, password = self.get_params(config)
         self.redisPool = ConnectionPool(host=hosts, port=port)
 
     def create_mysql(self, database=None):
-        # global MYSQL, DATABASE, mysqlPool
+        global MYSQL, DATABASE, mysqlPool
         config = self.configs[self.MYSQL]
         hosts, port, user, password = self.get_params(config)
         if not database:
@@ -68,7 +68,7 @@ class Pool:
         self.mysqlPool = MySQLConnectionPool(pool_size=CNX_POOL_MAXSIZE, pool_name='POOL', **dbconfig)
 
     def create_mongo(self):
-        # global MONGO, mongoPool
+        global MONGO, mongoPool
         config = self.configs[self.MONGO]
         hosts, port, user, password = self.get_params(config)
         self.mongoPool = MongoClient(host=hosts, port=port)

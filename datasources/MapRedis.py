@@ -1,9 +1,12 @@
 class MapRedis:
-    server = None
+    # server = None
 
     def __init__(self, pool):
-        global server
+        # global server
         self.server = pool.get_redis()
 
     def __del__(self):
         pass
+
+    def get_server(self):
+        return self.server

@@ -2,7 +2,7 @@ from redis.client import Redis
 from cassandra.cluster import Session
 from pymongo.mongo_client import MongoClient
 from mysql.connector.pooling import PooledMySQLConnection
-from startup.Startup import pool
+from startup.Startup import conn_pool
 
 
 # TODO Add else clauses to all methods to return error message in case sent server message does not match any configured instance
@@ -39,7 +39,7 @@ def create(server, payload):
             database = payload['database']
             db = server[database]
         else:
-            database = pool.configs['MongoDB']['database']
+            database = conn_pool.configs['MongoDB']['database']
             db = server[database]
         col = db[collection]
         if isinstance(doc, list):
@@ -94,7 +94,7 @@ def read(server, payload):
             database = payload['database']
             db = server[database]
         else:
-            database = pool.configs['MongoDB']['database']
+            database = conn_pool.configs['MongoDB']['database']
             db = server[database]
         col = db[collection]
         if len(filterm) == 0:
@@ -146,7 +146,7 @@ def update(server, payload):
             database = payload['database']
             db = server[database]
         else:
-            database = pool.configs['MongoDB']['database']
+            database = conn_pool.configs['MongoDB']['database']
             db = server[database]
         col = db[collection]
         return col.update_many(filterm, doc).modified_count
@@ -199,7 +199,7 @@ def delete(server, payload):
             database = payload['database']
             db = server[database]
         else:
-            database = pool.configs['MongoDB']['database']
+            database = conn_pool.configs['MongoDB']['database']
             db = server[database]
         col = db[collection]
         return col.delete_many(filterm).deleted_count

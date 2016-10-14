@@ -1,29 +1,25 @@
 class MapperEntity:
-    def __init__(self):
-        self.source = None
-        self.payload = None
-        self.query_type = None
 
     @property
     def source(self):
-        return self.source
+        return self.__source
 
     @source.setter
-    def source(self,value):
-        self.source = value
+    def source(self, value):
+        self.__source = value
 
     @property
     def payload(self):
-        return self.payload
+        return self.__payload
 
     @payload.setter
-    def payload(self,value):
-        self.payload = value
+    def payload(self, value):
+        self.__payload = value
 
     @property
     def query_type(self):
-        return self.query_type
+        return self.__query_type
 
     @query_type.setter
-    def query_type(self,value):
-        self.query_type = value
+    def query_type(self, value):
+        self.__query_type = value
