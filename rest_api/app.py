@@ -1,4 +1,6 @@
 # !flask/bin/python
+import sys
+sys.path.insert(0, 'C:\Anaconda3\Lib\site-packages')
 import json
 from flask import Flask, jsonify, request
 from flask import make_response, abort, url_for
